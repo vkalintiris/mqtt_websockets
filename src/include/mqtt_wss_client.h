@@ -33,9 +33,14 @@
 
 typedef struct mqtt_wss_client *mqtt_wss_client;
 
+#define MQTT_WSS_MQTT_3 3
+#define MQTT_WSS_MQTT_5 5
+
 /* Creates new instance of MQTT over WSS. Doesn't start connection.
  * @param log_prefix this is prefix to be used when logging to discern between multiple
  *        mqtt_wss instances. Can be NULL.
+ * @param mqtt_version must be either MQTT_WSS_MQTT_3 or MQTT_WSS_MQTT_5. Specifies which MQTT
+ *        protocol version is to be used
  * @param log_callback is function pointer to fnc to be called when mqtt_wss wants
  *        to log. This allows plugging this library into your own logging system/solution.
  *        If NULL STDOUT/STDERR will be used.
@@ -46,6 +51,7 @@ typedef struct mqtt_wss_client *mqtt_wss_client;
  *        is acknowledged by server
  */
 mqtt_wss_client mqtt_wss_new(const char *log_prefix,
+                             int mqtt_version,
                              mqtt_wss_log_callback_t log_callback,
                              void (*msg_callback)(const char *topic, const void *msg, size_t msglen, int qos),
                              void (*puback_callback)(uint16_t packet_id));

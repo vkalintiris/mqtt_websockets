@@ -84,11 +84,12 @@ int main(int argc, char **argv)
         port = 9002;
     printf("Using port %d\n", port);
 
-    mqtt_wss_client client = mqtt_wss_new("main", mqtt_wss_log_cb, msg_callback, NULL);
+    mqtt_wss_client client = mqtt_wss_new("main", MQTT_WSS_MQTT_5, mqtt_wss_log_cb, msg_callback, NULL);
     if (!client) {
         printf("Couldn't initialize mqtt_wss\n");
         return 1;
     }
+
     while (!test_exit) {
         printf("client_handle = %d\n", client_handle(client));
     }

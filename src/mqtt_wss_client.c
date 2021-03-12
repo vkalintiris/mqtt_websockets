@@ -166,6 +166,7 @@ static void mqtt_rx_msg_callback(void **state, struct mqtt_response_publish *pub
 // doesn't look like Windows nightmare API
 #define MQTT_BUFFER_SIZE 1024*1024*3
 mqtt_wss_client mqtt_wss_new(const char *log_prefix,
+                             int mqtt_version,
                              mqtt_wss_log_callback_t log_callback,
                              void (*msg_callback)(const char *topic, const void *msg, size_t msglen, int qos),
                              void (*puback_callback)(uint16_t packet_id))
@@ -176,6 +177,11 @@ mqtt_wss_client mqtt_wss_new(const char *log_prefix,
     log = mqtt_wss_log_ctx_create(log_prefix, log_callback);
     if(!log)
         return NULL;
+
+    if (mqtt_version != MQTT_WSS_MQTT_3 && mqtt_version != MQTT_WSS_MQTT_5) {
+        mws_error(log, "Unknown MQTT version/implementation %d requested", mqtt_version);
+        goto fail;
+    }
 
     SSL_library_init();
     SSL_load_error_strings();
